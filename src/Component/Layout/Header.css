@@ -1,0 +1,10 @@
+.menu-item,a{
+    display: flex;
+        justify-content: space-around;
+      
+        color: black;
+        size:30px;
+        padding: 8px 15px;
+        float: right;
+        text-decoration: none;
+}
