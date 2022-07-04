@@ -1,22 +1,24 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./Home.css";
+import Moment from "moment";
+import { Link } from "react-router-dom";
 const Home = () => {
-  const [article, setArticle] = useState([]);
+  const [articles, setArticle] = useState([]);
+  let start = Date.now();
 
-  // let token = localStorage.getItem("token");
-  const getArticle = () => {
-    fetch("https://api.realworld.io/api/articles", {
+  let token = localStorage.getItem("token");
+  const getArticle = async () => {
+    await fetch("https://api.realworld.io/api/articles", {
       Method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
-
+        console.log("res", response);
         setArticle(response.articles);
         console.log(response.articles);
       });
@@ -25,7 +27,7 @@ const Home = () => {
   useEffect(() => {
     getArticle();
   }, []);
-  console.log("aa", article);
+  // console.log("aa", article);
 
   return (
     <>
@@ -48,21 +50,43 @@ const Home = () => {
             <a href="Your Feed">Your Feed</a>
           </li>
         </ul>
-        <hr style={{ marginTop: "50px" }} />
-        {article.map((user) => (
-          <div className="user" key={article.id}>
-            <img style={{ borderRadius: "50%" }} src={user.author.image} />
-            <h4> {user.author.username}</h4>
-            <p>{user.createdAt}</p>
-            <h5>{user.title}</h5>
-            <p>{user.description}</p>
-            <p>{user.favoritedCount}</p>
-            <hr />
-          </div>
-        ))}
-      </div>
-      <div>
-        <h1>{article.title}</h1>
+        <div className="content">
+          <hr style={{ marginTop: "50px" }} />
+          {articles.map((user, index) => (
+            <div className="user" key={index}>
+              <img
+                style={{
+                  borderRadius: "50%",
+                  maxWidth: "35px",
+                  maxHeight: "35px",
+                }}
+                src={user.author.image}
+              />
+              <Link to="userProfile/:user"> {user.author.username}</Link>
+              <p>{Moment(user.createdAt).format("MMMM Do YYYY")}</p>
+              <h5>{user.title}</h5>
+              <p>{user.description}</p>
+
+              <p>{user.body}</p>
+              {localStorage.setItem("slug", user.slug)}
+              <p>{user.slug}</p>
+              <span>Read more...</span>
+              <div className="btn">
+                <button className="btn btn-primary" type="button">
+                  {user.favoritesCount}
+                </button>
+              </div>
+              <ul className="tag">
+                <li className="tagList">{user.tagList[0]}</li>
+              </ul>
+
+              <hr />
+            </div>
+          ))}
+        </div>
+        <div>
+          <h1>{articles.title}</h1>
+        </div>
       </div>
     </>
   );

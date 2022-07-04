@@ -6,3 +6,20 @@
     color:White;
     padding-top: 50px;;
 }
+.content{
+   margin-left:200px;
+   margin-right: 400px;
+}
+.tagList{
+    border: 1px solid #ddd;
+        color: #aaa !important;
+        background: 0 0 !important;
+        float: right;
+        cursor: pointer;
+}
+ul.tag li{
+        display: inline-block !important;
+}
+.btn{
+    float: right;
+}

@@ -6,6 +6,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
 const SignIn = () => {
   let navigate = useNavigate();
   // const [email, setEmail] = useState(" ");
@@ -42,19 +44,21 @@ const SignIn = () => {
     })
       .then((res) => res.json())
       .then((response) => {
-        const token = response.user.token;
-        if (token) {
-          localStorage.setItem("token", response.user.token);
-          localStorage.getItem(token);
-          navigate("/profile");
-        }
+        localStorage.setItem("token", response.user.token);
+        // const token = response.user.token;
         localStorage.setItem("username", response.user.username);
+        if (localStorage.getItem("token")) {
+          // localStorage.setItem("token", response.user.token);
+          // localStorage.getItem("token");
+          navigate("/");
+          toast.success("Successfully signed in!");
+        }
 
-        console.log("token", token);
+        // console.log("token", token);
       })
 
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        toast.error("login failed");
       });
   };
 
@@ -73,7 +77,6 @@ const SignIn = () => {
             />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
-
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -83,10 +86,10 @@ const SignIn = () => {
               {...register("password", { required: true })}
             />
           </Form.Group>
-
           <Button variant="primary" type="submit">
             Submit
           </Button>
+
           {/* <a href="#" onClick={() => navigate("signup")}>
             Already have account? Sign Up
           </a> */}

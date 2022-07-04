@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 const NewArticle = () => {
@@ -24,14 +24,16 @@ const NewArticle = () => {
           title: article.title,
           description: article.description,
           body: article.body,
-          tagList: [],
+          tagList: [article.tag],
         },
       }),
-    }).then((response) => {
-      response.json();
-    });
-
-    navigate("/getArticle");
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        navigate("/");
+      });
   };
 
   return (
